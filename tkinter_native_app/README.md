@@ -1,6 +1,6 @@
 # Tkinter Native App - Simple Desktop Clock
 
-This container provides a simple Tkinter-based clock. It includes a Dockerfile and build script fixed to avoid bash syntax errors and to support GUI execution via X11 on Linux.
+This container provides a simple Tkinter-based clock. The Dockerfile creates a dedicated Python virtual environment in /opt/venv, ensures pip is available, and installs dependencies from requirements.txt if present.
 
 ## Build
 
@@ -11,6 +11,11 @@ This container provides a simple Tkinter-based clock. It includes a Dockerfile a
 
 - Using raw docker:
   docker build -t tkinter_native_app:latest .
+
+Notes:
+- The build installs system packages tk/tcl and python3-venv/python3-pip.
+- A virtual environment is created at /opt/venv, pip is bootstrapped/updated, and any dependencies in requirements.txt are installed using /opt/venv/bin/pip.
+- If requirements.txt is missing or empty, the build succeeds without installing extra packages.
 
 ## Run (Linux, X11 forwarding)
 
@@ -29,9 +34,14 @@ On a Linux host with X11:
 
 If no display is available (e.g., CI):
 
-  docker run --rm tkinter_native_app:latest bash -lc "xvfb-run -a python app.py"
+  docker run --rm tkinter_native_app:latest bash -lc "xvfb-run -a /opt/venv/bin/python app.py"
 
 Note: xvfb is not installed in the image by default to keep the image slim. You can extend the Dockerfile or install at runtime if needed.
+
+## Execution & Entrypoint
+
+- The container CMD uses /opt/venv/bin/python app.py, so activation scripts are not required.
+- Healthcheck also uses the venv interpreter.
 
 ## Security Notes
 

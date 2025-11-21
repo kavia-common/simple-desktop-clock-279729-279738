@@ -1,0 +1,3 @@
+# Minimal requirements file for the Tkinter native app.
+# Tkinter is provided by system packages; no extra packages are strictly required.
+# Leave this file empty or add packages as needed.
