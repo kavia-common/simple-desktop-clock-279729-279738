@@ -63,7 +63,8 @@ RUN if [ -f "/app/requirements.txt" ]; then \
     fi
 
 # Use a basic healthcheck to ensure the container stays responsive.
-HEALTHCHECK --interval=30s --timeout=5s --retries=3 CMD "${VIRTUAL_ENV}/bin/python" -c "import sys" || exit 1
+# Keep the HEALTHCHECK simple without shell operator chaining to avoid parsing quirks.
+HEALTHCHECK --interval=30s --timeout=5s --retries=3 CMD ["/opt/venv/bin/python", "-c", "import sys"]
 
 # Change ownership of the app directory
 RUN chown -R "${USERNAME}:${USERNAME}" /app

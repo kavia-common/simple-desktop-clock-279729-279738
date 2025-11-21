@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 # A simple build helper for the tkinter_native_app container.
 # Uses strict mode to avoid common bash pitfalls and syntax errors.
+# Ensure this file uses LF endings to avoid Docker build shell parsing issues.
 set -euo pipefail
 
 IMAGE_NAME="${IMAGE_NAME:-tkinter_native_app:latest}"
